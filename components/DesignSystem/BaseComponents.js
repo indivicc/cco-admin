@@ -114,6 +114,7 @@ export const H1 = ({ children, variant = 'default', ...props }) => {
   return (
     <h1
       style={styles[variant]}
+      className={`h1-${variant}`}
       {...props}
     >
       {children}

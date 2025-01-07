@@ -8,7 +8,6 @@ import {
   H1,
   H2
 } from './DesignSystem/BaseComponents';
-import EmailManager from './EmailManager';
 import { getCustomers, getProducts } from '../utils/api-client';
 
 const AdminPanel = () => {
@@ -66,14 +65,8 @@ const AdminPanel = () => {
           padding: DesignSystem.spacing.scale.lg + 'px'
         }}
       >
-        <BaseCard
-          style={{
-            width: '100%',
-            maxWidth: '500px',
-            textAlign: 'center'
-          }}
-        >
-          <H1 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
+        <BaseCard style={{ width: '100%', maxWidth: '500px', textAlign: 'center' }}>
+          <H1 variant="default" style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
             carbon copy originals
           </H1>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: DesignSystem.spacing.scale.md + 'px' }}>
@@ -85,12 +78,7 @@ const AdminPanel = () => {
               style={{ textAlign: 'center' }}
             />
             {error && (
-              <p
-                style={{
-                  color: DesignSystem.colors.semantic.error,
-                  fontStyle: 'italic'
-                }}
-              >
+              <p style={{ color: DesignSystem.colors.semantic.error, fontStyle: 'italic' }}>
                 {error}
               </p>
             )}
@@ -102,13 +90,7 @@ const AdminPanel = () => {
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: DesignSystem.colors.primary.backgroundCream
-      }}
-    >
-      {/* Header */}
+    <div style={{ minHeight: '100vh', backgroundColor: DesignSystem.colors.primary.backgroundCream }}>
       <header
         style={{
           backgroundColor: DesignSystem.colors.primary.blue,
@@ -118,11 +100,10 @@ const AdminPanel = () => {
           fontFamily: 'Courier New, monospace'
         }}
       >
-        <H1>carbon copy originals</H1>
+        <H1 variant="onBlue">carbon copy originals</H1>
         <p style={{ opacity: 0.6 }}>admin interface</p>
       </header>
 
-      {/* Navigation */}
       <nav
         style={{
           backgroundColor: 'white',
@@ -138,7 +119,7 @@ const AdminPanel = () => {
             onClick={() => setActiveTab(tab)}
             style={{
               margin: `${DesignSystem.spacing.scale.sm}px ${DesignSystem.spacing.scale.md}px`,
-              textTransform: 'lowercase'
+              textTransform: 'lowercase',
             }}
           >
             {tab}
@@ -146,7 +127,6 @@ const AdminPanel = () => {
         ))}
       </nav>
 
-      {/* Main Content */}
       <main
         style={{
           maxWidth: DesignSystem.grid.maxWidth,
@@ -156,13 +136,7 @@ const AdminPanel = () => {
       >
         <BaseCard>
           {loading ? (
-            <p
-              style={{
-                textAlign: 'center',
-                color: DesignSystem.colors.primary.blue,
-                fontStyle: 'italic'
-              }}
-            >
+            <p style={{ textAlign: 'center', color: DesignSystem.colors.primary.blue, fontStyle: 'italic' }}>
               loading...
             </p>
           ) : (
@@ -174,33 +148,8 @@ const AdminPanel = () => {
                   </H2>
                   <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
                     {customers.map((customer) => (
-                      <BaseCard
-                        key={customer.customer_id}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div>
-                          <p
-                            style={{
-                              color: DesignSystem.colors.primary.blue,
-                              fontWeight: DesignSystem.typography.weights.bold
-                            }}
-                          >
-                            {customer.customer_id}
-                          </p>
-                          <p
-                            style={{
-                              color: DesignSystem.colors.secondary.textGray,
-                              fontSize: '0.8rem'
-                            }}
-                          >
-                            {customer.total_purchases} purchases · last purchase: {new Date(customer.last_purchase).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <BaseButton variant="secondary">view details</BaseButton>
+                      <BaseCard key={customer.customer_id}>
+                        <p>{customer.customer_id}</p>
                       </BaseCard>
                     ))}
                   </div>
@@ -211,38 +160,6 @@ const AdminPanel = () => {
                   <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
                     prints
                   </H2>
-                  <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
-                    {prints.map((print) => (
-                      <BaseCard
-                        key={print.shopify_product_id}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div>
-                          <p
-                            style={{
-                              color: DesignSystem.colors.primary.blue,
-                              fontWeight: DesignSystem.typography.weights.bold
-                            }}
-                          >
-                            {print.title || print.shopify_product_id}
-                          </p>
-                          <p
-                            style={{
-                              color: DesignSystem.colors.secondary.textGray,
-                              fontSize: '0.8rem'
-                            }}
-                          >
-                            status: {print.is_sold ? 'sold' : 'available'} · verification: {print.verification_code || 'none'}
-                          </p>
-                        </div>
-                        <BaseButton variant="secondary">view print</BaseButton>
-                      </BaseCard>
-                    ))}
-                  </div>
                 </div>
               )}
             </>
