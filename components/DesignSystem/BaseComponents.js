@@ -2,7 +2,7 @@
 import React from 'react';
 import * as DesignSystem from '../../styles/design-system';
 
-// BaseButton for 90's Style
+// Updated BaseButton for 90's Style
 export const BaseButton = ({
   children,
   variant = 'primary',
@@ -10,30 +10,32 @@ export const BaseButton = ({
   disabled = false,
   ...props
 }) => {
+  // Base button styles
   const baseStyles = {
     fontFamily: DesignSystem.typography.fontFamily.primary,
     textTransform: 'lowercase',
     cursor: disabled ? DesignSystem.interactionStates.disabled.cursor : 'pointer',
     opacity: disabled ? DesignSystem.interactionStates.disabled.opacity : 1,
-    padding: DesignSystem.componentStyles.button.primary.padding,
-    transition: DesignSystem.componentStyles.button.primary.transition,
+    border: '3px solid black',
+    padding: '10px 20px',
+    transition: 'background-color 0.3s ease',
+    display: 'inline-block',
     textAlign: 'center',
-    border: variant === 'secondary'
-      ? DesignSystem.componentStyles.button.secondary.border
-      : 'none',
   };
 
+  // Styles for primary and secondary variants
   const variantStyles = {
     primary: {
-      backgroundColor: DesignSystem.componentStyles.button.primary.backgroundColor,
-      color: DesignSystem.componentStyles.button.primary.color,
+      backgroundColor: DesignSystem.colors.primary.blue,
+      color: DesignSystem.colors.primary.backgroundCream,
     },
     secondary: {
-      backgroundColor: DesignSystem.componentStyles.button.secondary.backgroundColor,
-      color: DesignSystem.componentStyles.button.secondary.color,
+      backgroundColor: DesignSystem.colors.primary.backgroundCream,
+      color: DesignSystem.colors.primary.blue,
     },
   };
 
+  // Merge base styles with the variant styles
   const combinedStyles = {
     ...baseStyles,
     ...variantStyles[variant],
@@ -41,7 +43,7 @@ export const BaseButton = ({
 
   return (
     <button
-      style={combinedStyles}
+      style={combinedStyles} // Apply the merged styles
       className={`cco-button cco-button--${variant} ${className}`}
       disabled={disabled}
       {...props}
@@ -51,14 +53,14 @@ export const BaseButton = ({
   );
 };
 
-// BaseInput for Retro Style
+// Updated BaseInput for Retro Style
 export const BaseInput = ({ className = '', disabled = false, ...props }) => {
   const inputStyles = {
-    fontFamily: DesignSystem.componentStyles.input.fontFamily,
-    border: `3px solid ${DesignSystem.componentStyles.input.borderColor}`,
-    backgroundColor: DesignSystem.componentStyles.input.backgroundColor,
+    fontFamily: DesignSystem.typography.fontFamily.primary,
+    border: `3px solid ${DesignSystem.colors.primary.blue}`,
+    backgroundColor: DesignSystem.colors.primary.backgroundCream,
     color: DesignSystem.colors.primary.blue,
-    padding: DesignSystem.componentStyles.input.padding,
+    padding: '10px',
     width: '100%',
     boxSizing: 'border-box',
     opacity: disabled ? DesignSystem.interactionStates.disabled.opacity : 1,
@@ -79,11 +81,10 @@ export const BaseInput = ({ className = '', disabled = false, ...props }) => {
 export const BaseCard = ({ children, className = '', ...props }) => {
   const cardStyles = {
     fontFamily: DesignSystem.typography.fontFamily.primary,
-    border: DesignSystem.componentStyles.card.border,
-    backgroundColor: DesignSystem.componentStyles.card.backgroundColor,
-    padding: DesignSystem.componentStyles.card.padding,
-    boxShadow: DesignSystem.componentStyles.card.boxShadow,
-    margin: DesignSystem.spacing.scale.sm,
+    border: `3px solid ${DesignSystem.colors.primary.blue}`,
+    backgroundColor: DesignSystem.colors.primary.backgroundCream,
+    padding: '20px',
+    margin: '10px 0',
   };
 
   return (
@@ -94,20 +95,31 @@ export const BaseCard = ({ children, className = '', ...props }) => {
 };
 
 // Typography Components
-export const H1 = ({ children, ...props }) => (
-  <h1
-    style={{
+export const H1 = ({ children, variant = 'default', ...props }) => {
+  const styles = {
+    default: {
       fontFamily: DesignSystem.typography.fontFamily.primary,
       fontSize: DesignSystem.typography.sizes.h1,
       color: DesignSystem.colors.primary.blue,
       lineHeight: DesignSystem.typography.lineHeight,
-      letterSpacing: DesignSystem.typography.letterSpacing,
-    }}
-    {...props}
-  >
-    {children}
-  </h1>
-);
+    },
+    onBlue: {
+      fontFamily: DesignSystem.typography.fontFamily.primary,
+      fontSize: DesignSystem.typography.sizes.h1,
+      color: DesignSystem.colors.primary.backgroundCream, // Warm white color for blue background
+      lineHeight: DesignSystem.typography.lineHeight,
+    },
+  };
+
+  return (
+    <h1
+      style={styles[variant]}
+      {...props}
+    >
+      {children}
+    </h1>
+  );
+};
 
 export const H2 = ({ children, ...props }) => (
   <h2
@@ -115,8 +127,6 @@ export const H2 = ({ children, ...props }) => (
       fontFamily: DesignSystem.typography.fontFamily.primary,
       fontSize: DesignSystem.typography.sizes.h2,
       color: DesignSystem.colors.primary.blue,
-      lineHeight: DesignSystem.typography.lineHeight,
-      letterSpacing: DesignSystem.typography.letterSpacing,
     }}
     {...props}
   >
