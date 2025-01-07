@@ -1,68 +1,30 @@
-// utils/db.js
-import { createClient } from '@vercel/postgres';
+// Updated api-client.js to handle data fetching
+import axios from 'axios';
 
-export async function getVerifications() {
-  const client = createClient();
-  await client.connect();
-  
-  try {
-    const { rows } = await client.query(
-      'SELECT * FROM verifications ORDER BY unit_number DESC'
-    );
-    return rows;
-  } finally {
-    await client.end();
-  }
-}
+const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
+});
 
-export async function getProducts() {
-  const client = createClient();
-  await client.connect();
-  
+// Fetch customers
+export const getCustomers = async () => {
   try {
-    const { rows } = await client.query(`
-      SELECT p.*, v.salt, v.unit_number 
-      FROM products p
-      LEFT JOIN verifications v ON p.verification_code = v.code
-      ORDER BY p.sold_at DESC
-    `);
-    return rows;
-  } finally {
-    await client.end();
+    const response = await apiClient.get('/customers');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    throw error;
   }
-}
+};
 
-export async function getCustomers() {
-  const client = createClient();
-  await client.connect();
-  
+// Fetch products/prints
+export const getProducts = async () => {
   try {
-    const { rows } = await client.query(`
-      SELECT DISTINCT customer_id, 
-             COUNT(*) as total_purchases,
-             MAX(sold_at) as last_purchase
-      FROM products 
-      WHERE customer_id IS NOT NULL
-      GROUP BY customer_id
-      ORDER BY last_purchase DESC
-    `);
-    return rows;
-  } finally {
-    await client.end();
+    const response = await apiClient.get('/prints');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching prints:', error);
+    throw error;
   }
-}
+};
 
-export async function searchVerifications(query) {
-  const client = createClient();
-  await client.connect();
-  
-  try {
-    const { rows } = await client.query(
-      'SELECT * FROM verifications WHERE code ILIKE $1',
-      [`%${query}%`]
-    );
-    return rows;
-  } finally {
-    await client.end();
-  }
-}
+export default apiClient;
