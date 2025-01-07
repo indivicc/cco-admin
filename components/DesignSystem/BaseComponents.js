@@ -1,7 +1,8 @@
+// Updated components/DesignSystem/BaseComponents.js
 import React from 'react';
 import * as DesignSystem from '../../styles/design-system';
 
-// Updated BaseButton for 90's Style
+// BaseButton for 90's Style
 export const BaseButton = ({
   children,
   variant = 'primary',
@@ -10,23 +11,26 @@ export const BaseButton = ({
   ...props
 }) => {
   const baseStyles = {
-    fontFamily: 'Courier New, monospace',
+    fontFamily: DesignSystem.typography.fontFamily.primary,
     textTransform: 'lowercase',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    border: '3px solid black',
-    padding: '10px 20px',
-    transition: 'background-color 0.3s ease',
+    cursor: disabled ? DesignSystem.interactionStates.disabled.cursor : 'pointer',
+    opacity: disabled ? DesignSystem.interactionStates.disabled.opacity : 1,
+    padding: DesignSystem.componentStyles.button.primary.padding,
+    transition: DesignSystem.componentStyles.button.primary.transition,
+    textAlign: 'center',
+    border: variant === 'secondary'
+      ? DesignSystem.componentStyles.button.secondary.border
+      : 'none',
   };
 
   const variantStyles = {
     primary: {
-      backgroundColor: '#3856DD',
-      color: '#FFF6F0',
+      backgroundColor: DesignSystem.componentStyles.button.primary.backgroundColor,
+      color: DesignSystem.componentStyles.button.primary.color,
     },
     secondary: {
-      backgroundColor: '#FFF6F0',
-      color: '#3856DD',
+      backgroundColor: DesignSystem.componentStyles.button.secondary.backgroundColor,
+      color: DesignSystem.componentStyles.button.secondary.color,
     },
   };
 
@@ -47,18 +51,18 @@ export const BaseButton = ({
   );
 };
 
-// Updated BaseInput for Retro Style
+// BaseInput for Retro Style
 export const BaseInput = ({ className = '', disabled = false, ...props }) => {
   const inputStyles = {
-    fontFamily: 'Courier New, monospace',
-    border: '3px solid #3856DD',
-    backgroundColor: '#FFF6F0',
-    color: '#3856DD',
-    padding: '10px',
+    fontFamily: DesignSystem.componentStyles.input.fontFamily,
+    border: `3px solid ${DesignSystem.componentStyles.input.borderColor}`,
+    backgroundColor: DesignSystem.componentStyles.input.backgroundColor,
+    color: DesignSystem.colors.primary.blue,
+    padding: DesignSystem.componentStyles.input.padding,
     width: '100%',
     boxSizing: 'border-box',
-    opacity: disabled ? 0.5 : 1,
-    cursor: disabled ? 'not-allowed' : 'text',
+    opacity: disabled ? DesignSystem.interactionStates.disabled.opacity : 1,
+    cursor: disabled ? DesignSystem.interactionStates.disabled.cursor : 'text',
   };
 
   return (
@@ -71,14 +75,15 @@ export const BaseInput = ({ className = '', disabled = false, ...props }) => {
   );
 };
 
-// Base Card Component
+// BaseCard Component
 export const BaseCard = ({ children, className = '', ...props }) => {
   const cardStyles = {
-    fontFamily: 'Courier New, monospace',
-    border: '3px solid #3856DD',
-    backgroundColor: '#FFF6F0',
-    padding: '20px',
-    margin: '10px 0',
+    fontFamily: DesignSystem.typography.fontFamily.primary,
+    border: DesignSystem.componentStyles.card.border,
+    backgroundColor: DesignSystem.componentStyles.card.backgroundColor,
+    padding: DesignSystem.componentStyles.card.padding,
+    boxShadow: DesignSystem.componentStyles.card.boxShadow,
+    margin: DesignSystem.spacing.scale.sm,
   };
 
   return (
@@ -92,9 +97,11 @@ export const BaseCard = ({ children, className = '', ...props }) => {
 export const H1 = ({ children, ...props }) => (
   <h1
     style={{
-      fontFamily: 'Courier New, monospace',
-      fontSize: '24px',
-      color: '#3856DD',
+      fontFamily: DesignSystem.typography.fontFamily.primary,
+      fontSize: DesignSystem.typography.sizes.h1,
+      color: DesignSystem.colors.primary.blue,
+      lineHeight: DesignSystem.typography.lineHeight,
+      letterSpacing: DesignSystem.typography.letterSpacing,
     }}
     {...props}
   >
@@ -105,9 +112,11 @@ export const H1 = ({ children, ...props }) => (
 export const H2 = ({ children, ...props }) => (
   <h2
     style={{
-      fontFamily: 'Courier New, monospace',
-      fontSize: '20px',
-      color: '#3856DD',
+      fontFamily: DesignSystem.typography.fontFamily.primary,
+      fontSize: DesignSystem.typography.sizes.h2,
+      color: DesignSystem.colors.primary.blue,
+      lineHeight: DesignSystem.typography.lineHeight,
+      letterSpacing: DesignSystem.typography.letterSpacing,
     }}
     {...props}
   >
