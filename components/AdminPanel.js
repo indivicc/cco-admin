@@ -1,7 +1,15 @@
 // components/AdminPanel.js
 import React, { useState, useEffect } from 'react';
+import * as DesignSystem from '../styles/design-system';
+import { 
+  BaseButton, 
+  BaseInput, 
+  BaseCard, 
+  H1, 
+  H2 
+} from './DesignSystem/BaseComponents';
 import EmailManager from './EmailManager';
-import { getCustomers, getProducts, getVerifications } from '../utils/api-client';
+import { getCustomers, getProducts } from '../utils/api-client';
 
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,7 +26,7 @@ const AdminPanel = () => {
     }
   }, [isAuthenticated, activeTab]);
 
-  const loadData = async () => {
+const loadData = async () => {
     setLoading(true);
     try {
       if (activeTab === 'customers') {
@@ -30,9 +38,10 @@ const AdminPanel = () => {
       }
     } catch (error) {
       console.error('Error loading data:', error);
-      setError('error loading data');
+      setError('Error loading data');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleLogin = (e) => {
@@ -41,110 +50,160 @@ const AdminPanel = () => {
       setIsAuthenticated(true);
       setError('');
     } else {
-      setError('invalid password');
+      setError('Invalid password');
     }
   };
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#FFF6F0] flex items-center justify-center p-6">
-        <div className="w-full max-w-lg text-center">
-          <h1 className="text-[#3856DD] text-4xl mb-2 font-serif tracking-wide">
+      <div 
+        style={{
+          minHeight: '100vh', 
+          backgroundColor: DesignSystem.colors.primary.backgroundCream,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: DesignSystem.spacing.scale.lg + 'px'
+        }}
+      >
+        <BaseCard 
+          style={{
+            width: '100%',
+            maxWidth: '500px',
+            textAlign: 'center'
+          }}
+        >
+          <H1 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
             carbon copy originals
-          </h1>
-          <p className="text-[#3856DD] opacity-60 mb-16 italic tracking-wide">
-            admin interface
-          </p>
-          
-          <form onSubmit={handleLogin} className="space-y-6 bg-white p-12">
-            <input
+          </H1>
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: DesignSystem.spacing.scale.md + 'px' }}>
+            <BaseInput
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="enter password"
-              className="w-full p-4 border border-[#3856DD] border-opacity-20 focus:border-[#3856DD] outline-none text-[#3856DD] text-center tracking-wide placeholder:text-[#3856DD] placeholder:opacity-60 font-serif"
+              style={{ textAlign: 'center' }}
             />
-
             {error && (
-              <p className="text-[#3856DD] opacity-60 italic tracking-wide">
+              <p 
+                style={{ 
+                  color: DesignSystem.colors.semantic.error, 
+                  fontStyle: 'italic' 
+                }}
+              >
                 {error}
               </p>
             )}
-
-            <button
-              type="submit"
-              className="w-full bg-[#3856DD] text-[#FFF6F0] p-4 tracking-wide hover:opacity-90 transition-opacity font-serif"
-            >
+            <BaseButton type="submit">
               login
-            </button>
+            </BaseButton>
           </form>
-        </div>
+        </BaseCard>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF6F0]">
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: DesignSystem.colors.primary.backgroundCream 
+    }}>
       {/* Header */}
-      <header className="bg-[#3856DD] text-[#FFF6F0] py-12">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <h1 className="font-serif text-4xl mb-2 tracking-wide">
-            carbon copy originals
-          </h1>
-          <p className="opacity-60 tracking-wide">admin interface</p>
-        </div>
+      <header 
+        style={{
+          backgroundColor: DesignSystem.colors.primary.blue,
+          color: DesignSystem.colors.primary.backgroundCream,
+          padding: `${DesignSystem.spacing.scale.lg}px 0`,
+          textAlign: 'center'
+        }}
+      >
+        <H1>carbon copy originals</H1>
+        <p style={{ opacity: 0.6 }}>admin interface</p>
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white border-b border-[#3856DD] border-opacity-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="flex justify-center space-x-12">
-            {['customers', 'prints', 'emails'].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`py-4 tracking-wide relative font-serif ${
-                  activeTab === tab 
-                    ? 'text-[#3856DD]' 
-                    : 'text-[#3856DD] opacity-60 hover:opacity-100'
-                }`}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <div className="absolute bottom-0 left-0 w-full h-px bg-[#3856DD]" />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+      <nav 
+        style={{
+          backgroundColor: 'white',
+          borderBottom: `1px solid ${DesignSystem.colors.secondary.accentGray}`,
+          display: 'flex',
+          justifyContent: 'center'
+        }}
+      >
+        {['customers', 'prints', 'emails'].map(tab => (
+          <BaseButton
+            key={tab}
+            variant={activeTab === tab ? 'primary' : 'secondary'}
+            onClick={() => setActiveTab(tab)}
+            style={{ 
+              margin: `${DesignSystem.spacing.scale.sm}px ${DesignSystem.spacing.scale.md}px`,
+              textTransform: 'lowercase'
+            }}
+          >
+            {tab}
+          </BaseButton>
+        ))}
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-white p-12">
+      <main 
+        style={{
+          maxWidth: DesignSystem.grid.maxWidth,
+          margin: '0 auto',
+          padding: `${DesignSystem.spacing.scale.lg}px ${DesignSystem.spacing.scale.md}px`
+        }}
+      >
+        <BaseCard>
           {loading ? (
-            <p className="text-center text-[#3856DD] opacity-60 italic">loading...</p>
+            <p 
+              style={{ 
+                textAlign: 'center', 
+                color: DesignSystem.colors.primary.blue,
+                fontStyle: 'italic'
+              }}
+            >
+              loading...
+            </p>
           ) : (
             <>
               {activeTab === 'customers' && (
                 <div>
-                  <h2 className="text-[#3856DD] text-2xl mb-8 tracking-wide font-serif">
+                  <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
                     customers
-                  </h2>
-                  <div className="space-y-6">
+                  </H2>
+                  <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
                     {customers.map((customer) => (
-                      <div 
+                      <BaseCard 
                         key={customer.customer_id}
-                        className="border border-[#3856DD] border-opacity-20 p-4"
+                        style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between',
+                          alignItems: 'center' 
+                        }}
                       >
-                        <p className="text-[#3856DD] font-serif">
-                          {customer.customer_id}
-                        </p>
-                        <p className="text-[#3856DD] opacity-60 text-sm">
-                          {customer.total_purchases} purchases · 
-                          last purchase: {new Date(customer.last_purchase).toLocaleDateString()}
-                        </p>
-                      </div>
+                        <div>
+                          <p 
+                            style={{ 
+                              color: DesignSystem.colors.primary.blue,
+                              fontWeight: DesignSystem.typography.weights.bold 
+                            }}
+                          >
+                            {customer.customer_id}
+                          </p>
+                          <p 
+                            style={{ 
+                              color: DesignSystem.colors.secondary.textGray,
+                              fontSize: '0.8rem' 
+                            }}
+                          >
+                            {customer.total_purchases} purchases · 
+                            last purchase: {new Date(customer.last_purchase).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <BaseButton variant="secondary">
+                          view details
+                        </BaseButton>
+                      </BaseCard>
                     ))}
                   </div>
                 </div>
@@ -152,39 +211,58 @@ const AdminPanel = () => {
 
               {activeTab === 'emails' && (
                 <div>
-                  <h2 className="text-[#3856DD] text-2xl mb-8 tracking-wide font-serif">
+                  <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
                     email management
-                  </h2>
+                  </H2>
                   <EmailManager customers={customers} />
                 </div>
               )}
 
               {activeTab === 'prints' && (
                 <div>
-                  <h2 className="text-[#3856DD] text-2xl mb-8 tracking-wide font-serif">
+                  <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
                     print generator
-                  </h2>
-                  <div className="space-y-6">
+                  </H2>
+                  <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
                     {prints.map((print) => (
-                      <div 
+                      <BaseCard 
                         key={print.shopify_product_id}
-                        className="border border-[#3856DD] border-opacity-20 p-4"
+                        style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between',
+                          alignItems: 'center' 
+                        }}
                       >
-                        <p className="text-[#3856DD] font-serif">
-                          {print.title || print.shopify_product_id}
-                        </p>
-                        <p className="text-[#3856DD] opacity-60 text-sm">
-                          status: {print.is_sold ? 'sold' : 'available'} ·
-                          verification: {print.verification_code || 'none'}
-                        </p>
-                      </div>
+                        <div>
+                          <p 
+                            style={{ 
+                              color: DesignSystem.colors.primary.blue,
+                              fontWeight: DesignSystem.typography.weights.bold 
+                            }}
+                          >
+                            {print.title || print.shopify_product_id}
+                          </p>
+                          <p 
+                            style={{ 
+                              color: DesignSystem.colors.secondary.textGray,
+                              fontSize: '0.8rem' 
+                            }}
+                          >
+                            status: {print.is_sold ? 'sold' : 'available'} · 
+                            verification: {print.verification_code || 'none'}
+                          </p>
+                        </div>
+                        <BaseButton variant="secondary">
+                          view print
+                        </BaseButton>
+                      </BaseCard>
                     ))}
                   </div>
                 </div>
               )}
             </>
           )}
-        </div>
+        </BaseCard>
       </main>
     </div>
   );

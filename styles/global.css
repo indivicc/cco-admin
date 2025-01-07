@@ -1,0 +1,128 @@
+/* styles/global.css */
+:root {
+  /* Colors */
+  --cco-primary-blue: #3856DD;
+  --cco-background-cream: #FFF6F0;
+  --cco-accent-gray: #324DC7;
+  --cco-text-gray: rgba(56, 86, 221, 0.8);
+
+  /* Typography */
+  --cco-font-primary: "Times New Roman", Times, serif;
+  --cco-font-fallback: Georgia, serif;
+
+  /* Spacing */
+  --cco-spacing-xs: 4px;
+  --cco-spacing-sm: 8px;
+  --cco-spacing-md: 16px;
+  --cco-spacing-lg: 24px;
+  --cco-spacing-xl: 32px;
+  --cco-spacing-xxl: 48px;
+}
+
+/* Global Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--cco-font-primary);
+  background-color: var(--cco-background-cream);
+  color: var(--cco-primary-blue);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* Accessibility Improvements */
+a, button {
+  transition: all 0.3s ease;
+}
+
+a:focus, 
+button:focus {
+  outline: 2px solid var(--cco-primary-blue);
+  outline-offset: 2px;
+}
+
+/* Responsive Typography */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Utility Classes */
+.lowercase {
+  text-transform: lowercase;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.opacity-60 {
+  opacity: 0.6;
+}
+
+/* Grid System */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -12px;
+}
+
+.col {
+  padding: 0 12px;
+  flex: 1;
+}
+
+/* Responsive Utilities */
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .hide-mobile {
+    display: none;
+  }
+
+  .show-mobile {
+    display: block;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}

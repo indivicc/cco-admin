@@ -1,5 +1,12 @@
 // components/EmailManager.js
 import React, { useState } from 'react';
+import * as DesignSystem from '../styles/design-system';
+import { 
+  BaseButton, 
+  BaseInput, 
+  BaseCard, 
+  H2 
+} from './DesignSystem/BaseComponents';
 
 const EmailManager = ({ customers }) => {
   const [emailType, setEmailType] = useState('transactional');
@@ -16,8 +23,8 @@ const EmailManager = ({ customers }) => {
     setStatus('sending...');
 
     try {
-      const finalRecipients = selectedCustomers.length > 0 
-        ? selectedCustomers 
+      const finalRecipients = selectedCustomers.length > 0
+        ? selectedCustomers
         : recipients.split(',').map(email => email.trim());
 
       const response = await fetch('https://cco-six.vercel.app/api/admin/send-email', {
@@ -34,6 +41,7 @@ const EmailManager = ({ customers }) => {
       });
 
       const data = await response.json();
+
       if (response.ok) {
         setStatus('email sent successfully');
         if (emailType !== 'template') {
@@ -53,109 +61,158 @@ const EmailManager = ({ customers }) => {
   };
 
   return (
-    <div className="space-y-12">
+    <div style={{ 
+      display: 'grid', 
+      gap: `${DesignSystem.spacing.scale.lg}px` 
+    }}>
       {/* Email Type Selection */}
-      <div className="flex justify-center space-x-12 border-b border-[#3856DD] border-opacity-20">
+      <div 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: `${DesignSystem.spacing.scale.md}px`,
+          borderBottom: `1px solid ${DesignSystem.colors.secondary.accentGray}` 
+        }}
+      >
         {['transactional', 'newsletter', 'templates'].map(type => (
-          <button
+          <BaseButton
             key={type}
+            variant={emailType === type ? 'primary' : 'secondary'}
             onClick={() => setEmailType(type)}
-            className={`pb-4 tracking-wide relative font-serif ${
-              emailType === type 
-                ? 'text-[#3856DD]' 
-                : 'text-[#3856DD] opacity-60 hover:opacity-100'
-            }`}
           >
             {type}
-            {emailType === type && (
-              <div className="absolute bottom-0 left-0 w-full h-px bg-[#3856DD]" />
-            )}
-          </button>
+          </BaseButton>
         ))}
       </div>
 
       {/* Customer Selection */}
       {emailType === 'newsletter' && customers?.length > 0 && (
-        <div className="space-y-4">
-          <label className="block text-[#3856DD] opacity-60 tracking-wide font-serif">
+        <BaseCard>
+          <H2 style={{ marginBottom: `${DesignSystem.spacing.scale.md}px` }}>
             select customers
-          </label>
-          <div className="max-h-40 overflow-y-auto border border-[#3856DD] border-opacity-20 p-4">
+          </H2>
+          <div 
+            style={{ 
+              maxHeight: '300px', 
+              overflowY: 'auto',
+              border: `1px solid ${DesignSystem.colors.primary.blue}`,
+              padding: `${DesignSystem.spacing.scale.sm}px` 
+            }}
+          >
             {customers.map(customer => (
-              <label key={customer.customer_id} className="flex items-center space-x-2 py-1">
+              <div 
+                key={customer.customer_id}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: `${DesignSystem.spacing.scale.sm}px`,
+                  marginBottom: `${DesignSystem.spacing.scale.xs}px`
+                }}
+              >
                 <input
                   type="checkbox"
+                  id={`customer-${customer.customer_id}`}
                   checked={selectedCustomers.includes(customer.customer_id)}
                   onChange={(e) => {
                     if (e.target.checked) {
                       setSelectedCustomers([...selectedCustomers, customer.customer_id]);
                     } else {
-                      setSelectedCustomers(selectedCustomers.filter(id => id !== customer.customer_id));
+                      setSelectedCustomers(
+                        selectedCustomers.filter(id => id !== customer.customer_id)
+                      );
                     }
                   }}
-                  className="text-[#3856DD]"
+                  style={{ 
+                    accentColor: DesignSystem.colors.primary.blue 
+                  }}
                 />
-                <span className="text-[#3856DD] font-serif">{customer.customer_id}</span>
-              </label>
+                <label 
+                  htmlFor={`customer-${customer.customer_id}`}
+                  style={{ 
+                    color: DesignSystem.colors.primary.blue,
+                    cursor: 'pointer' 
+                  }}
+                >
+                  {customer.customer_id}
+                </label>
+              </div>
             ))}
           </div>
-        </div>
+        </BaseCard>
       )}
 
       {/* Email Form */}
-      <form onSubmit={handleSendEmail} className="space-y-8">
+      <form 
+        onSubmit={handleSendEmail} 
+        style={{ 
+          display: 'grid', 
+          gap: `${DesignSystem.spacing.scale.md}px` 
+        }}
+      >
         {emailType !== 'newsletter' && (
-          <div className="space-y-4">
-            <label className="block text-[#3856DD] opacity-60 tracking-wide font-serif">
+          <BaseCard>
+            <H2 style={{ marginBottom: `${DesignSystem.spacing.scale.md}px` }}>
               recipients
-            </label>
-            <input
+            </H2>
+            <BaseInput
               type="text"
               value={recipients}
               onChange={(e) => setRecipients(e.target.value)}
               placeholder="email@example.com, email2@example.com"
-              className="w-full p-4 border border-[#3856DD] border-opacity-20 focus:border-[#3856DD] outline-none text-[#3856DD] tracking-wide placeholder:text-[#3856DD] placeholder:opacity-60 font-serif"
+              style={{ textAlign: 'center' }}
             />
-          </div>
+          </BaseCard>
         )}
 
-        <div className="space-y-4">
-          <label className="block text-[#3856DD] opacity-60 tracking-wide font-serif">
+        <BaseCard>
+          <H2 style={{ marginBottom: `${DesignSystem.spacing.scale.md}px` }}>
             subject
-          </label>
-          <input
+          </H2>
+          <BaseInput
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="w-full p-4 border border-[#3856DD] border-opacity-20 focus:border-[#3856DD] outline-none text-[#3856DD] tracking-wide font-serif"
           />
-        </div>
+        </BaseCard>
 
-        <div className="space-y-4">
-          <label className="block text-[#3856DD] opacity-60 tracking-wide font-serif">
+        <BaseCard>
+          <H2 style={{ marginBottom: `${DesignSystem.spacing.scale.md}px` }}>
             content
-          </label>
+          </H2>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={6}
-            className="w-full p-4 border border-[#3856DD] border-opacity-20 focus:border-[#3856DD] outline-none text-[#3856DD] tracking-wide font-serif"
+            style={{
+              width: '100%',
+              fontFamily: DesignSystem.typography.fontFamily.primary,
+              border: `2px solid ${DesignSystem.colors.primary.blue}`,
+              padding: `${DesignSystem.spacing.scale.sm}px`,
+              color: DesignSystem.colors.primary.blue,
+              backgroundColor: DesignSystem.colors.primary.backgroundCream,
+              resize: 'vertical'
+            }}
           />
-        </div>
+        </BaseCard>
 
         {status && (
-          <p className="text-center text-[#3856DD] opacity-60 italic tracking-wide font-serif">
+          <p 
+            style={{ 
+              textAlign: 'center', 
+              color: DesignSystem.colors.primary.blue, 
+              fontStyle: 'italic' 
+            }}
+          >
             {status}
           </p>
         )}
 
-        <button
-          type="submit"
+        <BaseButton 
+          type="submit" 
           disabled={isSending}
-          className="w-full bg-[#3856DD] text-[#FFF6F0] p-4 tracking-wide hover:opacity-90 transition-opacity disabled:opacity-50 font-serif"
         >
           {isSending ? 'sending...' : 'send email'}
-        </button>
+        </BaseButton>
       </form>
     </div>
   );
