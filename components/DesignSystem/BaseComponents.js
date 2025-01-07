@@ -1,14 +1,13 @@
-// Updated components/DesignSystem/BaseComponents.js
 import React from 'react';
 import * as DesignSystem from '../../styles/design-system';
 
 // Updated BaseButton for 90's Style
-export const BaseButton = ({ 
-  children, 
-  variant = 'primary', 
-  className = '', 
+export const BaseButton = ({
+  children,
+  variant = 'primary',
+  className = '',
   disabled = false,
-  ...props 
+  ...props
 }) => {
   const baseStyles = {
     fontFamily: 'Courier New, monospace',
@@ -22,26 +21,23 @@ export const BaseButton = ({
 
   const variantStyles = {
     primary: {
-      ...baseStyles,
       backgroundColor: '#3856DD',
       color: '#FFF6F0',
-      '&:hover': {
-        backgroundColor: '#293BB2',
-      },
     },
     secondary: {
-      ...baseStyles,
       backgroundColor: '#FFF6F0',
       color: '#3856DD',
-      '&:hover': {
-        backgroundColor: '#D9E3F0',
-      },
     },
+  };
+
+  const combinedStyles = {
+    ...baseStyles,
+    ...variantStyles[variant],
   };
 
   return (
     <button
-      style={variantStyles[variant]}
+      style={combinedStyles}
       className={`cco-button cco-button--${variant} ${className}`}
       disabled={disabled}
       {...props}
