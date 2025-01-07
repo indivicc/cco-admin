@@ -1,12 +1,12 @@
-// components/AdminPanel.js
+// Updated AdminPanel.js to integrate new design system
 import React, { useState, useEffect } from 'react';
 import * as DesignSystem from '../styles/design-system';
-import { 
-  BaseButton, 
-  BaseInput, 
-  BaseCard, 
-  H1, 
-  H2 
+import {
+  BaseButton,
+  BaseInput,
+  BaseCard,
+  H1,
+  H2
 } from './DesignSystem/BaseComponents';
 import EmailManager from './EmailManager';
 import { getCustomers, getProducts } from '../utils/api-client';
@@ -26,7 +26,7 @@ const AdminPanel = () => {
     }
   }, [isAuthenticated, activeTab]);
 
-const loadData = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
       if (activeTab === 'customers') {
@@ -56,9 +56,9 @@ const loadData = async () => {
 
   if (!isAuthenticated) {
     return (
-      <div 
+      <div
         style={{
-          minHeight: '100vh', 
+          minHeight: '100vh',
           backgroundColor: DesignSystem.colors.primary.backgroundCream,
           display: 'flex',
           alignItems: 'center',
@@ -66,7 +66,7 @@ const loadData = async () => {
           padding: DesignSystem.spacing.scale.lg + 'px'
         }}
       >
-        <BaseCard 
+        <BaseCard
           style={{
             width: '100%',
             maxWidth: '500px',
@@ -81,22 +81,20 @@ const loadData = async () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="enter password"
+              placeholder="Enter password"
               style={{ textAlign: 'center' }}
             />
             {error && (
-              <p 
-                style={{ 
-                  color: DesignSystem.colors.semantic.error, 
-                  fontStyle: 'italic' 
+              <p
+                style={{
+                  color: DesignSystem.colors.semantic.error,
+                  fontStyle: 'italic'
                 }}
               >
                 {error}
               </p>
             )}
-            <BaseButton type="submit">
-              login
-            </BaseButton>
+            <BaseButton type="submit">Login</BaseButton>
           </form>
         </BaseCard>
       </div>
@@ -104,17 +102,20 @@ const loadData = async () => {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: DesignSystem.colors.primary.backgroundCream 
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: DesignSystem.colors.primary.backgroundCream
+      }}
+    >
       {/* Header */}
-      <header 
+      <header
         style={{
           backgroundColor: DesignSystem.colors.primary.blue,
           color: DesignSystem.colors.primary.backgroundCream,
           padding: `${DesignSystem.spacing.scale.lg}px 0`,
-          textAlign: 'center'
+          textAlign: 'center',
+          fontFamily: 'Courier New, monospace'
         }}
       >
         <H1>carbon copy originals</H1>
@@ -122,7 +123,7 @@ const loadData = async () => {
       </header>
 
       {/* Navigation */}
-      <nav 
+      <nav
         style={{
           backgroundColor: 'white',
           borderBottom: `1px solid ${DesignSystem.colors.secondary.accentGray}`,
@@ -130,12 +131,12 @@ const loadData = async () => {
           justifyContent: 'center'
         }}
       >
-        {['customers', 'prints', 'emails'].map(tab => (
+        {['customers', 'prints', 'emails'].map((tab) => (
           <BaseButton
             key={tab}
             variant={activeTab === tab ? 'primary' : 'secondary'}
             onClick={() => setActiveTab(tab)}
-            style={{ 
+            style={{
               margin: `${DesignSystem.spacing.scale.sm}px ${DesignSystem.spacing.scale.md}px`,
               textTransform: 'lowercase'
             }}
@@ -146,7 +147,7 @@ const loadData = async () => {
       </nav>
 
       {/* Main Content */}
-      <main 
+      <main
         style={{
           maxWidth: DesignSystem.grid.maxWidth,
           margin: '0 auto',
@@ -155,9 +156,9 @@ const loadData = async () => {
       >
         <BaseCard>
           {loading ? (
-            <p 
-              style={{ 
-                textAlign: 'center', 
+            <p
+              style={{
+                textAlign: 'center',
                 color: DesignSystem.colors.primary.blue,
                 fontStyle: 'italic'
               }}
@@ -173,88 +174,72 @@ const loadData = async () => {
                   </H2>
                   <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
                     {customers.map((customer) => (
-                      <BaseCard 
+                      <BaseCard
                         key={customer.customer_id}
-                        style={{ 
-                          display: 'flex', 
+                        style={{
+                          display: 'flex',
                           justifyContent: 'space-between',
-                          alignItems: 'center' 
+                          alignItems: 'center'
                         }}
                       >
                         <div>
-                          <p 
-                            style={{ 
+                          <p
+                            style={{
                               color: DesignSystem.colors.primary.blue,
-                              fontWeight: DesignSystem.typography.weights.bold 
+                              fontWeight: DesignSystem.typography.weights.bold
                             }}
                           >
                             {customer.customer_id}
                           </p>
-                          <p 
-                            style={{ 
+                          <p
+                            style={{
                               color: DesignSystem.colors.secondary.textGray,
-                              fontSize: '0.8rem' 
+                              fontSize: '0.8rem'
                             }}
                           >
-                            {customer.total_purchases} purchases · 
-                            last purchase: {new Date(customer.last_purchase).toLocaleDateString()}
+                            {customer.total_purchases} purchases · last purchase: {new Date(customer.last_purchase).toLocaleDateString()}
                           </p>
                         </div>
-                        <BaseButton variant="secondary">
-                          view details
-                        </BaseButton>
+                        <BaseButton variant="secondary">view details</BaseButton>
                       </BaseCard>
                     ))}
                   </div>
                 </div>
               )}
-
-              {activeTab === 'emails' && (
-                <div>
-                  <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
-                    email management
-                  </H2>
-                  <EmailManager customers={customers} />
-                </div>
-              )}
-
               {activeTab === 'prints' && (
                 <div>
                   <H2 style={{ marginBottom: DesignSystem.spacing.scale.md + 'px' }}>
-                    print generator
+                    prints
                   </H2>
                   <div style={{ display: 'grid', gap: DesignSystem.spacing.scale.md + 'px' }}>
                     {prints.map((print) => (
-                      <BaseCard 
+                      <BaseCard
                         key={print.shopify_product_id}
-                        style={{ 
-                          display: 'flex', 
+                        style={{
+                          display: 'flex',
                           justifyContent: 'space-between',
-                          alignItems: 'center' 
+                          alignItems: 'center'
                         }}
                       >
                         <div>
-                          <p 
-                            style={{ 
+                          <p
+                            style={{
                               color: DesignSystem.colors.primary.blue,
-                              fontWeight: DesignSystem.typography.weights.bold 
+                              fontWeight: DesignSystem.typography.weights.bold
                             }}
                           >
                             {print.title || print.shopify_product_id}
                           </p>
-                          <p 
-                            style={{ 
+                          <p
+                            style={{
                               color: DesignSystem.colors.secondary.textGray,
-                              fontSize: '0.8rem' 
+                              fontSize: '0.8rem'
                             }}
                           >
-                            status: {print.is_sold ? 'sold' : 'available'} · 
-                            verification: {print.verification_code || 'none'}
+                            status: {print.is_sold ? 'sold' : 'available'} · verification: {print.verification_code || 'none'}
                           </p>
                         </div>
-                        <BaseButton variant="secondary">
-                          view print
-                        </BaseButton>
+                        <BaseButton variant="secondary">view print</BaseButton>
                       </BaseCard>
                     ))}
                   </div>
